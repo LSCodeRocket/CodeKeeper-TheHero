@@ -130,10 +130,17 @@
     <ClCompile Include="CodeKeeper-TheHero.cpp" />
     <ClCompile Include="CurrentSubmissionAlgorithm.cpp" />
     <ClCompile Include="HeroAlgorithm.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Simulation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
     <ClInclude Include="CurrentSubmissionAlgorithm.h" />
     <ClInclude Include="HeroAlgorithm.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="Simulation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
