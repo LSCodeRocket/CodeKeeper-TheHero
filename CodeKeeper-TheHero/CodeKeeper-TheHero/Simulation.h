@@ -5,6 +5,7 @@
 #include "Item.h"
 #include "HeroAlgorithm.h"
 
+const int MAXIMUM_MAP_ID = 0;
 
 class Simulation
 {
@@ -12,10 +13,12 @@ public:
 
 	enum simCondition { WON, DEATH, NEUTRAL };
 
-	Simulation();
+	Simulation(int map_id);
 	
-	void step();
-	void runForSteps(int step_count);
+	void setAlgorithm(HeroAlgorithm selected_algorithm);
+
+	simCondition step();
+	simCondition runForSteps(int step_count);
 	
 	void generateItems();
 	void collectItem();
@@ -23,25 +26,23 @@ public:
 	void generateEnemies();
 	void moveEnemies();
 
-	void randomlyChooseMap();
-	int getMapID();
-	void setMapID(int map_id);
-	bool loadMap();
-
-	int getSimulationID();
-	void setSimulationID(int simulation_id);
+	bool randomlyChooseMap();
+	bool loadMap(int map_id);
 
 	simCondition checkSimState();
 
 	void debugOutput();
 	void displayHyperparameters();
+
+	void setupPlayer();
 	
 private:
 	std::vector<Monster> monsters;
 	std::vector<Item> items;
 
-	int map_id;
-	int simulation_id;
+	std::vector<std::vector<int>> map;
+	std::vector<int> exit_position;
+
 	HeroAlgorithm selected_algorithm;
 
 };
