@@ -68,11 +68,14 @@ PlayerStatus getFramePlayerData() {
 }
 
 void addItemStatus(EntityList& entity_list, int x, int y, int type, int value) {
+    
     ItemStatus item_for_push_back;
+    
     item_for_push_back.item_type = static_cast<ItemType>(type - 2);
     item_for_push_back.x = x; item_for_push_back.y = y;
     item_for_push_back.value = value;
     entity_list.item_vector.push_back(item_for_push_back);
+    
     DebugLog("ITEM VALUE : " + std::to_string(value) + " X: " + std::to_string(x) + " Y: " + std::to_string(y));
 }
 
@@ -109,6 +112,7 @@ EnemyKeyData parseEnemyKeyData(int enemy_type)
     }
     return enemy_data;
 }
+
 void addEnemyStatus(EntityList& entity_list, int x, int y, int type, int value) {
     EnemyStatus enemy_for_push_back;
     enemy_for_push_back.health = value;
@@ -122,7 +126,9 @@ void addEnemyStatus(EntityList& entity_list, int x, int y, int type, int value) 
     entity_list.enemy_vector.push_back(enemy_for_push_back);
     DebugLog("ENEMY: Health: " + std::to_string(value) + " X: " + std::to_string(x) + " Y: " + std::to_string(y) + " Type: " + std::to_string(type)); 
 }
+
 void pushBackEntity(EntityList& entity_list, int x, int y, int type, int value) {
+    
     if(type <= 1){ return; }
     if (type >= 2 && type <= 6) {
         addItemStatus(entity_list, x, y, type, value);
@@ -149,17 +155,22 @@ EntityList getVisibleEntityData() {
 
     int visible_entities; // the number of visible entities
     std::cin >> visible_entities; std::cin.ignore();
+    
     for (int i = 0; i < visible_entities; i++) {
+        
         int ex; // x position of the entity
         int ey; // y position of the entity
         int etype; // the type of the entity
         int evalue; // value associated with the entity
+        
         std::cin >> ex >> ey >> etype >> evalue; std::cin.ignore();
+        
         pushBackEntity(visible_entity_list, ex, ey, etype, evalue);
     }
 
     return visible_entity_list;
 }
+
 int main()
 {
 
