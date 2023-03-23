@@ -3,6 +3,14 @@
 #include <vector>
 #include <algorithm>
 
+bool DEBUG_FLAG = true;
+
+void DebugLog(std::string log)
+{
+    if (!DEBUG_FLAG) { return; }
+    std::cerr << "[DEBUG] " << log << std::endl;
+}
+
 struct PlayerStatus {
     int x; int y;
     int health;
@@ -24,6 +32,11 @@ enum ItemType {
 struct EnemyStatus {
     int x; int y;
     int health;
+    int view_range;
+    int attack_range;
+    int damage;
+};
+struct EnemyKeyData {
     int view_range;
     int attack_range;
     int damage;
@@ -56,24 +69,70 @@ PlayerStatus getFramePlayerData() {
 
 void addItemStatus(EntityList& entity_list, int x, int y, int type, int value) {
     ItemStatus item_for_push_back;
-    item_for_push_back.item_type = type - 2;
+    item_for_push_back.item_type = static_cast<ItemType>(type - 2);
     item_for_push_back.x = x; item_for_push_back.y = y;
     item_for_push_back.value = value;
     entity_list.item_vector.push_back(item_for_push_back);
+    DebugLog("ITEM VALUE : " + std::to_string(value) + " X: " + std::to_string(x) + " Y: " + std::to_string(y));
 }
 
+EnemyKeyData parseEnemyKeyData(int enemy_type)
+{
+    EnemyKeyData enemy_data;
+    switch (enemy_type) {
+    case 7:
+        enemy_data.view_range = 0;
+        enemy_data.attack_range = 0;
+        enemy_data.damage = 0;
+        break;
+    case 8:
+        enemy_data.view_range = 1;
+        enemy_data.attack_range = 1;
+        enemy_data.damage = 1;
+        break;
+    case 9:
+        enemy_data.view_range = 2;
+        enemy_data.attack_range = 1;
+        enemy_data.damage = 1;
+        break;
+    case 10:
+        enemy_data.view_range = 2;
+        enemy_data.attack_range = 2;
+        enemy_data.damage = 1;
+        break;
+    case 11:
+        enemy_data.view_range = 3;
+        enemy_data.attack_range = 1;
+        enemy_data.damage = 3;
+    default:
+        return enemy_data;
+    }
+    return enemy_data;
+}
 void addEnemyStatus(EntityList& entity_list, int x, int y, int type, int value) {
     EnemyStatus enemy_for_push_back;
     enemy_for_push_back.health = value;
     enemy_for_push_back.x = x; enemy_for_push_back.y = y;
-    enemy_for_push_back.value = value;
+
+    EnemyKeyData current_enemy_data = parseEnemyKeyData(type);
+    enemy_for_push_back.view_range = current_enemy_data.view_range;
+    enemy_for_push_back.attack_range = current_enemy_data.attack_range;
+    enemy_for_push_back.damage = current_enemy_data.damage;
+
     entity_list.enemy_vector.push_back(enemy_for_push_back);
+    DebugLog("ENEMY: Health: " + std::to_string(value) + " X: " + std::to_string(x) + " Y: " + std::to_string(y) + " Type: " + std::to_string(type)); 
 }
 void pushBackEntity(EntityList& entity_list, int x, int y, int type, int value) {
+    if(type <= 1){ return; }
     if (type >= 2 && type <= 6) {
         addItemStatus(entity_list, x, y, type, value);
+        return;
     }
-
+    if (type >= 7 && type <= 11) {
+        addEnemyStatus(entity_list, x, y, type, value);
+        return;
+    }
+    DebugLog("Severely Undefined Behavior. To be honest, I didn't think this was possible.");
 }
 
 EntityList initializeEntityList()
@@ -89,16 +148,17 @@ EntityList getVisibleEntityData() {
     EntityList visible_entity_list = initializeEntityList();
 
     int visible_entities; // the number of visible entities
-    std::cin >> visible_entities; cin.ignore();
+    std::cin >> visible_entities; std::cin.ignore();
     for (int i = 0; i < visible_entities; i++) {
         int ex; // x position of the entity
         int ey; // y position of the entity
         int etype; // the type of the entity
         int evalue; // value associated with the entity
-
         std::cin >> ex >> ey >> etype >> evalue; std::cin.ignore();
-        pushBackEntity(entity_list);
+        pushBackEntity(visible_entity_list, ex, ey, etype, evalue);
     }
+
+    return visible_entity_list;
 }
 int main()
 {
@@ -106,7 +166,7 @@ int main()
     while (1) {
         PlayerStatus player_data = getFramePlayerData();
 
-        
+        EntityList visible_entities = getVisibleEntityData();
 
         // Write an action using cout. DON'T FORGET THE "<< endl"
         // To debug: cerr << "Debug messages..." << endl;
