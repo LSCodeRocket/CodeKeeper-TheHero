@@ -86,27 +86,27 @@ EnemyKeyData parseEnemyKeyData(int enemy_type)
 {
     EnemyKeyData enemy_data;
     switch (static_cast<MonsterType>(enemy_type)) {
-    case MonsterType::BOX: // Box 
+    case MonsterType::BOX:
         enemy_data.view_range = 0;
         enemy_data.attack_range = 0;
         enemy_data.damage = 0;
         break;
-    case MonsterType::SKELETON: // Skeleton
+    case MonsterType::SKELETON:
         enemy_data.view_range = 1;
         enemy_data.attack_range = 1;
         enemy_data.damage = 1;
         break;
-    case MonsterType::GARGOYLE: // Gargoyle
+    case MonsterType::GARGOYLE:
         enemy_data.view_range = 2;
         enemy_data.attack_range = 1;
         enemy_data.damage = 1;
         break;
-    case MonsterType::ORC: // Orc
+    case MonsterType::ORC:
         enemy_data.view_range = 2;
         enemy_data.attack_range = 2;
         enemy_data.damage = 1;
         break;
-    case MonsterType::VAMPIRE: // Vampire
+    case MonsterType::VAMPIRE:
         enemy_data.view_range = 3;
         enemy_data.attack_range = 1;
         enemy_data.damage = 3;

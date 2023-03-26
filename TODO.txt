@@ -1,0 +1,56 @@
+[ ] Choose to move or attack.
+	- [ ] EnemiesViewingSquare(M, x, y)
+		* [ ] For loop through all enemies
+		* [ ] Check if the square is within enemy range
+		* [ ] `push_back` to an "EnemyStatus" vector 
+		* [ ] Return this vector
+	- [ ] Check if any enemies are viewing player
+		* [ ] Return this boolean value.
+[ ] MOVING: Choose the best square to go to.
+	- [ ] Choose a set of reasonable squares
+		* [ ] Loop through every square with a known enemy and item location.
+		* [ ] Loop through every unknown square that touches a known square.
+		* [ ] Parse through each of them to determine which are reachable in fully known squares.
+		* [ ] For every square run PathFind(xi, yi, xf, yf, path)
+	- [ ] ArgMin a cost function for the squares.
+		* [ ] Loop through the "reasonable squares"
+		* [ ] Create a list of (square, value) pairs (each value is a cost).
+		* [ ] Choose the pair with the least value
+		* [ ] Return that pair's square.
+	- [ ] Create a path to that square with PathFind(xi, yi, xf, yf)
+	- [ ] Return the next square on that path (next to the current one.)
+[ ] ATTACKING: Choose the best square and weapon to attack.
+	- [ ] ArgMax a gain function for the weapons
+		* [ ] Loop through all possible attack squares
+		* [ ] Create a list of (square, weapon, value) triplet (each value is a gain)
+		* [ ] Choose the triplet with the greatest gain.
+	- [ ] Return that square and weapon pair.
+[ ] PathFind(xi, yi, xf, yf)
+	- [ ] Create a matrix of distance values
+		* [ ] Create a 16 x 12 matrix
+		* [ ] Loop through every square in the matrix
+		* [ ] If the square is unknown, set this value to 99999
+		* [ ] If this square is inaccesssible, set this value to 99999
+		* [ ] (In the original) Set the value equal to the Manhattan distance between that square and xf, yf
+	- [ ] Create a path starting from xi, yi and always minimizing this distance matrix
+		* [ ] Create a new matrix with -1s in it for every space that is passable and known
+		* [ ] Every space that is unknown or unpassable, replace with a 99999
+		* [ ] Run BFS(xi, yi, xf, yf, Matrix) to fill out the matrix
+		* [ ] If the matrix doesn't have a value for xf, yf return an empty path as a failure.
+		* [ ] Now that the matrix is filled with BFS values, add the two distance matrices together
+		* [ ] Find a path that minimizes the matrix
+			> [ ] Create a path with (xi, yi) in it.
+			> [ ] Do a while loop that ends when the ending part of the path is xf, yf
+			> [ ] Choose the next x and y values from the neighbors that minimize the matrix. 
+			> [ ] Append the point to the path.
+	- [ ] Return this path.
+[ ] BFS(xi, yi, xf, yf, Matrix)
+	- [ ] Set the xi, yi position in the Matrix to 0
+	- [ ] Keep a counter for the value that is currently given.
+	- [ ] Create a while loop that stops only when another cycle of BFS is not possible.
+		* [ ] Loop through all the squares of this current iteration value
+		* [ ] If any of them is next to a square that has a value of -1, return true so the loop keeps going
+	- [ ] Loop through all the squares of this given value
+	- [ ] Make adjacent squares into this value+1 (and only squares with -1 in them)
+	- [ ] End the while loop
+	- [ ] Return this matrix
